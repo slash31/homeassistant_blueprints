@@ -102,7 +102,7 @@ action:
   - service: light.turn_on
     target: !input light_target
     data:
-      brightness: "{{ motion_brightness }}""
+      brightness: "{{ motion_brightness }}"
   - wait_for_trigger:
       platform: state
       entity_id: !input motion_entity
