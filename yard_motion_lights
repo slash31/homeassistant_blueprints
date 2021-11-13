@@ -69,19 +69,6 @@ blueprint:
 mode: restart
 max_exceeded: silent
 
-variables:
-  late_night_threshold: !input late_night_threshold
-  normal_brightness: !input normal_brightness
-  late_night_brightness:  !input late_night_brightness
-  motion_brightness: !input full_brightness
-
-  no_motion_brightness: >
-    {% if now() < today_at(late_night_threshold) %}
-      {{ normal_brightness }}
-    {% else %}
-      {{ late_night_brightness }}
-    {% endif %}
-
 trigger:
   platform: state
   entity_id: !input motion_entity
@@ -93,16 +80,12 @@ condition:
     conditions:
     - condition: sun
       after: sunset
-      after_offset: !input sunset_offset
     - condition: sun
       before: sunrise
-      before_offset: !input sunrise_offset
 
 action:
   - service: light.turn_on
     target: !input light_target
-    data:
-      brightness: "{{ motion_brightness }}"
   - wait_for_trigger:
       platform: state
       entity_id: !input motion_entity
@@ -111,5 +94,3 @@ action:
   - delay: !input no_motion_wait
   - service: light.turn_on
     target: !input light_target
-    data:
-      brightness: "{{ no_motion_brightness }}"
