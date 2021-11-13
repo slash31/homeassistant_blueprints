@@ -38,18 +38,26 @@ blueprint:
       description: Time when light is dimmed for late night
       selector:
         time:
-    full_brightness:
-      name: Full brightness value
-      description: Brightness of light before late night threshold
-      default: 80
+    normal_brightness:
+      name: Normal brightness value
+      description: Brightness of light prior to late night threshold
+      default: 60
       selector:
         number:
           min: 0
           max: 100
-    dimmed_brightness:
-      name: Dimmed brightness value
+    late_night_brightness:
+      name: Late night brightness value
       description: Brightness of light after late night threshold
-      default: 15
+      default: 10
+      selector:
+        number:
+          min: 0
+          max: 100
+    full_brightness:
+      name: Full brightness value
+      description: Brightness of light when motion is detected
+      default: 80
       selector:
         number:
           min: 0
@@ -60,6 +68,19 @@ blueprint:
 mode: restart
 max_exceeded: silent
 
+variables:
+  late_night_threshold: !input late_night_threshold
+  normal_brightness: !input normal_brightness
+  late_night_brightness:  !input late_night_brightness
+  motion_brightness: !input full_brightness
+
+  no_motion_brightness: >
+    {% if now() < today_at(late_night_threshold) %}
+      {{ normal_brightness }}
+    {% else %}
+      {{ late_night_brightness }}
+    {% endif %}
+    
 trigger:
   platform: state
   entity_id: !input motion_entity
@@ -69,8 +90,9 @@ trigger:
 condition:
   - condition: or
     conditions:
-    - condition: time
-      after: !input late_night_threshold
+    - condition: sun
+      after: sunset
+      after_offset: !input sunset_offset
     - condition: sun
       before: sunrise
       before_offset: !input sunrise_offset
@@ -79,7 +101,7 @@ action:
   - service: light.turn_on
     target: !input light_target
     data:
-      brightness: !input full_brightness
+      brightness: "{{ motion_brightness }}"
   - wait_for_trigger:
       platform: state
       entity_id: !input motion_entity
@@ -89,4 +111,4 @@ action:
   - service: light.turn_on
     target: !input light_target
     data:
-      brightness: !input dimmed_brightness
+      brightness: "{{ no_motion_brightness }}"
