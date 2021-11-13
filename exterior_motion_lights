@@ -24,6 +24,15 @@ blueprint:
           min: 0
           max: 3600
           unit_of_measurement: seconds 
+    sunset_offset:
+      name: Offset before sunset
+      description: Define offset before sunrise
+      default: 45
+      selector:
+        number:
+          min: 0
+          max: 240
+          unit_of_measurement: minutes
     sunrise_offset:
       name: Offset after sunrise
       description: Define offset after sunrise
