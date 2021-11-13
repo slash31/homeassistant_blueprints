@@ -1,0 +1,115 @@
+blueprint:
+  name: Exterior Motion Light
+  description: Increase light intensity when motion is detected between 11pm and sunrise 
+  domain: automation
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    no_motion_wait:
+      name: Wait time
+      description: Time to leave the brightness up after last motion is detected.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds 
+    sunrise_offset:
+      name: Offset after sunrise
+      description: Define offset after sunrise
+      default: 45
+      selector:
+        number:
+          min: 0
+          max: 240
+          unit_of_measurement: minutes
+    late_night_threshold:
+      name: Late night threshold
+      description: Time when light is dimmed for late night
+      selector:
+        time:
+    
+    normal_brightness:
+      name: Normal brightness value
+      description: Brightness of light prior to late night threshold
+      default: 60
+      selector:
+        number:
+          min: 0
+          max: 100
+    late_night_brightness:
+      name: Late night brightness value
+      description: Brightness of light after late night threshold
+      default: 10
+      selector:
+        number:
+          min: 0
+          max: 100
+    full_brightness:
+      name: Full brightness value
+      description: Brightness of light when motion is detected
+      default: 80
+      selector:
+        number:
+          min: 0
+          max: 100
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+variables:
+  late_night_threshold: !input late_night_threshold
+  normal_brightness: !input normal_brightness
+  late_night_brightness:  !input late_night_brightness
+  motion_brightness: !input full_brightness
+
+  no_motion_brightness: >
+    {% if now() < today_at(late_night_threshold) %}
+      {{ normal_brightness }}
+    {% else %}
+      {{ late_night_brightness }}
+    {% endif %}
+
+trigger:
+  platform: state
+  entity_id: !input motion_entity
+  from: "off"
+  to: "on"
+  
+condition:
+  - condition: or
+    conditions:
+    - condition: sun
+      after: sunset
+      after_offset: !input sunset_offset
+    - condition: sun
+      before: sunrise
+      before_offset: !input sunrise_offset
+
+action:
+  - service: light.turn_on
+    target: !input light_target
+    data:
+      brightness: {{ motion_brightness }}
+  - wait_for_trigger:
+      platform: state
+      entity_id: !input motion_entity
+      from: "on"
+      to: "off"
+  - delay: !input no_motion_wait
+  - service: light.turn_on
+    target: !input light_target
+    data:
+      brightness: {{ no_motion_brightness }}
