@@ -84,7 +84,7 @@ variables:
   motion_brightness: !input full_brightness
 
   no_motion_brightness: >
-    {% if now() < today_at(late_night_threshold) and now() > today_at(12:00:00") %}
+    {% if now() < today_at(late_night_threshold) %}
       {{ normal_brightness }}
     {% else %}
       {{ late_night_brightness }}
