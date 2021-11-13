@@ -1,5 +1,5 @@
 blueprint:
-  name: Exterior Motion Light
+  name: Yard Motion Light
   description: Increase light intensity when motion is detected between 11pm and sunrise 
   domain: automation
   input:
