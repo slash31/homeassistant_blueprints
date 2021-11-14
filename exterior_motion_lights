@@ -7,7 +7,9 @@ blueprint:
       name: Motion Sensor
       selector:
         entity:
-          domain: binary_sensor
+          domain: 
+            - binary_sensor
+            - group
           device_class: motion
     light_target:
       name: Light
@@ -54,7 +56,7 @@ blueprint:
       selector:
         number:
           min: 0
-          max: 100
+          max: 255
     late_night_brightness:
       name: Late night brightness value
       description: Brightness of light after late night threshold
@@ -62,7 +64,7 @@ blueprint:
       selector:
         number:
           min: 0
-          max: 100
+          max: 255
     full_brightness:
       name: Full brightness value
       description: Brightness of light when motion is detected
@@ -70,7 +72,7 @@ blueprint:
       selector:
         number:
           min: 0
-          max: 100
+          max: 255
 
 # If motion is detected within the delay,
 # we restart the script.
