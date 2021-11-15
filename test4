@@ -42,4 +42,4 @@ action:
   - delay: 0:35
   - service: notify.notify
     data:
-      message: {{ scene_to_activate }}
+      message: "{{ scene_to_activate }}"
