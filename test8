@@ -1,5 +1,5 @@
 blueprint:
-  name: Exterior Lights Power On
+  name: test8
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
