@@ -28,8 +28,9 @@ variables:
   daylight: !input daylight_scene
   evening: !input evening_scene
   late_night: !input late_night_scene
+  sun_elevation: '{{ state_attr(''sun.sun'',''elevation'') }}'
   scene_to_activate: >
-    {% if state_attr(''sun.sun'',''elevation'') > 8 %}
+    {% if sun_elevation > 8 %}
       {{ daylight }}
     {% elif (now() < today_at(late_night_threshold) and today_at(late_night_threshold) > today_at("12:00:00") and now() > today_at("12:00:00")) or (now() < today_at(late_night_threshold) and today_at(late_night_threshold) < today_at("12:00:00") and now() < today_at("12:00:00")) %}
       {{ evening }}
