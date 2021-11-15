@@ -1,5 +1,5 @@
 blueprint:
-  name: test20
+  name: test21
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
@@ -42,13 +42,14 @@ trigger:
   topic: homeassistant/bridge/log
   
 condition:
-  - condition: and
+  - condition: or
     conditions:
-    - condition: "{{ trigger.payload_json.type == 'device_announced' }}"
-    - condition: or
-      conditions:
-        - condition: "{{ trigger.payload_json.meta.friendly_name == 'Front Porch Light' }}"
-        - condition: "{{ trigger.payload_json.meta.friendly_name == 'Back Porch Light' }}"
+      - condition: template
+        value_template: '{{ trigger.payload_json.meta.friendly_name == ''Front Porch Light'' }}'
+      - condition: template
+        value_template: '{{ trigger.payload_json.meta.friendly_name == ''Back Porch Light''}}'
+  - condition: template
+    value_template: '{{ trigger.payload_json.type == ''device_announced'' }}'
 
 action:
     service: scene.turn_on
