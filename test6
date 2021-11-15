@@ -3,12 +3,18 @@ blueprint:
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
-    action:
-      name: daylight_scene
-    action:
-      name: evening_scene
-    action:
-      name: late_night_scene
+    daylight_scene:
+      name: Scene to use when it's daylight
+      selector:
+        action: {}
+    evening_scene:
+      name: Scene to use when it's evening
+      selector:
+        action: {}
+    late_night_scene:
+      name: Scene to use when it's late night
+      selector:
+        action: {}
     light_target:
       name: Light
       selector:
