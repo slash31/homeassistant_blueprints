@@ -29,10 +29,8 @@ condition:
     conditions:
     - condition: sun
       after: sunset
-      after_offset: !input sunset_offset
     - condition: sun
       before: sunrise
-      before_offset: !input sunrise_offset
 
 action:
   # Actions are scripts so can also be a list of actions
