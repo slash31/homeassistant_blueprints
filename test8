@@ -18,15 +18,19 @@ blueprint:
       selector:
         entity:
           domain: scene
-    light_target:
-      name: Light
-      selector:
-        target:
-          entity:
-            domain: light
 
 variables:
-  scene_to_activate: !input daylight_scene
+   daylight: !input daylight_scene
+   evening: !input evening_scene
+   late_night: !input late_night_scene
+  scene_to_activate: >
+    {% if '{{ state_attr(''sun.sun'',''elevation'') }}' > 8 %}
+      {{ daylight }}
+    {% elsif (now() < today_at(late_night_threshold) and today_at(late_night_threshold) > today_at("12:00:00") and now() > today_at("12:00:00")) or (now() < today_at(late_night_threshold) and today_at(late_night_threshold) < today_at("12:00:00") and now() < today_at("12:00:00")) %}
+      {{ evening }}
+    {% else %}
+      {{ late_night }}
+    {% endif %}
     
 trigger:
   platform: mqtt
