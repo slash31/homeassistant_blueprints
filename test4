@@ -1,5 +1,5 @@
 blueprint:
-  name: test3
+  name: test4
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
@@ -28,7 +28,7 @@ variables:
   daylight: !input daylight_scene
   evening: !input evening_scene
   late_night: !input late_night_scene
-  sun_elevation: '{{ state_attr(''sun.sun'',''elevation'') }}'
+  sun_elevation: "{{ state_attr('sun.sun', 'elevation') }}"
   scene_to_activate: >
     {% if sun_elevation > 8 %}
       {{ daylight }}
