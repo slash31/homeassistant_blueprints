@@ -27,7 +27,6 @@ blueprint:
 
 variables:
   scene_to_activate: !input daylight_scene
-  notification_service: notify.mobile_app_myshkin
     
 trigger:
   platform: mqtt
@@ -42,11 +41,6 @@ condition:
       before: sunrise
 
 action:
-  # Actions are scripts so can also be a list of actions
-  - service: ""
-    data:
-      message: "Beautiful sunset!"
-  - delay: 0:35
-  - service: notify.notify
-    data:
-      message: "{{ scene_to_activate }}"
+    service: scene.turn_on
+    target:
+      entity_id: "{{ scene_to_activate }}"
