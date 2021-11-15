@@ -1,5 +1,5 @@
 blueprint:
-  name: test5
+  name: Exterior Lights Power On
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
@@ -51,7 +51,7 @@ condition:
     - condition: template
       value_template: '{{ trigger.payload_json.data.friendly_name == ''Front Porch Light'' }}'
     - condition: template
-      value_template: '{{ trigger.payload_json.data.friendly_name == ''Back Porch Light'' }}'
+      value_template: '{{ trigger.payload_json.data.friendly_name == ''Back Deck Light'' }}'
 
 action:
     service: scene.turn_on
