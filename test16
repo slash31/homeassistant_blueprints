@@ -1,5 +1,5 @@
 blueprint:
-  name: test15
+  name: test16
   description: Set the correct state/brightness/color for externior lights when powered on via the wall switch
   domain: automation
   input:
@@ -43,7 +43,7 @@ trigger:
   
 condition:
   - condition: template
-    value_template: '{{ trigger.payload_json.type }} == ''device_announced''
+    value_template: '{{ trigger.payload_json.type }} == ''device_announced'''
 
 action:
     service: scene.turn_on
