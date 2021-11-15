@@ -6,15 +6,18 @@ blueprint:
     daylight_scene:
       name: Scene to use when it's daylight
       selector:
-        action: {}
+        entity:
+          domain: scene
     evening_scene:
       name: Scene to use when it's evening
       selector:
-        action: {}
+        entity:
+          domain: scene
     late_night_scene:
       name: Scene to use when it's late night
       selector:
-        action: {}
+        entity:
+          domain: scene
     light_target:
       name: Light
       selector:
