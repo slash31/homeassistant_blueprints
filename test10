@@ -25,9 +25,9 @@ blueprint:
         time:
 
 variables:
-   daylight: !input daylight_scene
-   evening: !input evening_scene
-   late_night: !input late_night_scene
+  daylight: !input daylight_scene
+  evening: !input evening_scene
+  late_night: !input late_night_scene
   scene_to_activate: >
     {% if '{{ state_attr(''sun.sun'',''elevation'') }}' > 8 %}
       {{ daylight }}
